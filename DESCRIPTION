@@ -4,7 +4,15 @@ Title: Machine Learning Interpretability Tools
 Version: 0.1.0
 Author: Thiyanga Talagala
 Maintainer: Thiyanga Talagala <tstalagala@gmail.com>
-Description: Machine Learning Interpretability Tools
+Description: Machine learning interpretability tools (randomForest).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.5.1)
+Imports:
+        stats,
+        dplyr,
+        magrittr,
+        randomForest
+RoxygenNote: 6.1.0
