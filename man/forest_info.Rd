@@ -4,10 +4,10 @@
 \alias{forest_info}
 \title{Function to extract tree information in the forest}
 \usage{
-forest_info(forest, ntree)
+forest_info(model, ntree)
 }
 \arguments{
-\item{forest}{name of the randomForest model}
+\item{model}{name of the randomForest model}
 
 \item{ntree}{number of trees in the forest}
 }

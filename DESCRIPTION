@@ -14,5 +14,6 @@ Imports:
         stats,
         dplyr,
         magrittr,
-        randomForest
+        randomForest,
+        tidyverse
 RoxygenNote: 6.1.0
