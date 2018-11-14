@@ -2,4 +2,6 @@
 
 export(forest_info)
 export(ice_cal)
+export(meansd_ice)
 export(sd_pdp)
+importFrom(magrittr,"%>%")
