@@ -4,14 +4,14 @@
 \alias{sd_pdp}
 \title{Function to calculate standard deviation of partial dependence curves}
 \usage{
-sd_pdp(data, variable, classlabelvec)
+sd_pdp(icedata, variable, classlabelvec)
 }
 \arguments{
+\item{icedata}{ice calculations for a specific variable(output of icecal)}
+
 \item{variable}{name of the interested feature}
 
 \item{classlabelvec}{vector of names corresponds to classlabels}
-
-\item{ice_data}{ice calculations for a specific variable(output of ice_cal)}
 }
 \value{
 a dataframe including corresponding probability for each class

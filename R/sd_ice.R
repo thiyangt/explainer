@@ -8,12 +8,12 @@
 #' @param grid.resolution gridresolution size used in ice_cal function
 #' @return a dataframe including corresponding probability for each class
 #' @importFrom magrittr %>%
+#' @importFrom  dplyr group_by summarise_at
 #' @author Thiyanga Talagala
 #' @export
 meansd_ice <- function(ice_data, variable, classlabelvec, subrw, grid.resolution){
-  require("dplyr")
-  data$individual <- rep(1:subrw, grid.resolution)
-  sd_ice <- data %>%
+  ice_data$individual <- rep(1:subrw, grid.resolution)
+  sd_ice <- ice_data %>%
     group_by(individual) %>%
     summarise_at(vars(classlabelvec),
                  funs(sd(., na.rm=TRUE)))

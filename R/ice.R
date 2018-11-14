@@ -31,15 +31,15 @@ ice_cal <- function(model, variable, fulldf, subsetdf, grid.resolution = 10, tri
               length = grid.resolution)
 
   # split the other predictors
-  xc <- select(subsetdf, -!!var)
+  xc <- dplyr::select(subsetdf, -!!var)
 
   # Create grid based on feature space
-  grid.pred <- crossing(seqx, xc)
+  grid.pred <- tidyr::crossing(seqx, xc)
   colnames(grid.pred)[1] <- paste(pars$variable)
   predicted <- data.frame(predict(model, grid.pred, type="prob"))
   grid.pred$id <- 1:dim(grid.pred)[1]
   predicted$id <- 1:dim(grid.pred)[1]
-  full <- left_join(grid.pred, predicted)
+  full <- dplyr::left_join(grid.pred, predicted)
   return(full)
 
 }
