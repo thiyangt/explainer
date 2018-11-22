@@ -37,26 +37,26 @@ twowayinteraction <- function(model, variable1, variable2, fulldf, subsetdf, gri
   # Create a list containing the values of interest for each of the predictor
   seqx <- seq(from = min(x, na.rm = TRUE), to = max(x, na.rm = TRUE),
               length = grid.resolution)
-  outx <- grDevices::boxplot.stats(x, do.out = TRUE)$out
-  x1 <- x[!(x %in% outx)]
-  minx1 <- min(x1, na.rm = TRUE)
-  maxx1 <- max(x1, na.rm = TRUE)
-  seqrmoutx <- seq(from = minx1, to = maxx1, length = grid.resolution)
-  seqx.selected <- seqx[(seqx < minx1  & maxx1 < seqx)==TRUE]
-  seq.x <- sort(c(seqx.selected, seqrmoutx))
+  #outx <- grDevices::boxplot.stats(x, do.out = TRUE)$out
+  #x1 <- x[!(x %in% outx)]
+ # minx1 <- min(x1, na.rm = TRUE)
+  #maxx1 <- max(x1, na.rm = TRUE)
+  #seqrmoutx <- seq(from = minx1, to = maxx1, length = grid.resolution)
+  #seqx.selected <- seqx[(seqx < minx1  & maxx1 < seqx)==TRUE]
+  #seq.x <- sort(c(seqx.selected, seqrmoutx))
 
   seqy <- seq(from = min(y, na.rm = TRUE), to = max(y, na.rm = TRUE),
               length = grid.resolution)
-  outy <- grDevices::boxplot.stats(y, do.out = TRUE)$out
-  y1 <- y[!(y %in% outy)]
-  miny1 <- min(y1, na.rm = TRUE)
-  maxy1 <- max(y1, na.rm = TRUE)
-  seqrmouty <- seq(from = miny1, to = maxy1,length = grid.resolution)
-  seqy.selected <- seqy[(seqy < miny1  & maxy1 < seqy)==TRUE]
-  seq.y <- sort(c(seqy, seqrmouty))
+  #outy <- grDevices::boxplot.stats(y, do.out = TRUE)$out
+  #y1 <- y[!(y %in% outy)]
+ # miny1 <- min(y1, na.rm = TRUE)
+ # maxy1 <- max(y1, na.rm = TRUE)
+ # seqrmouty <- seq(from = miny1, to = maxy1,length = grid.resolution)
+ # seqy.selected <- seqy[(seqy < miny1  & maxy1 < seqy)==TRUE]
+ # seq.y <- sort(c(seqy, seqrmouty))
 
   # grid of selected variables
-  xs <- tidyr::crossing(seq.x, seq.y)
+  xs <- tidyr::crossing(seqx, seqy)
 
   # split the other predictors
   xc <- dplyr::select(subsetdf, -!!c(var1, var2))
@@ -76,6 +76,6 @@ twowayinteraction <- function(model, variable1, variable2, fulldf, subsetdf, gri
 #'data(iris)
 #'rf <- randomForest::randomForest(Species ~ ., data=iris)
 #'iris <- iris[1:2, -5]
-#'a <- twowayinteraction(rf, Sepal.Length, Sepal.Width, iris, iris, grid.resolution=2)
+#'a <- twowayinteraction(rf, Sepal.Length, Petal.Width, iris, iris, grid.resolution=2)
 
 
