@@ -13,17 +13,17 @@
 #' @author Thiyanga Talagala
 #' @export
 friedmanHstat <- function(model, fulldf, subsetdf, allfeatures,trimfeatures, grid.resolution, classnames){
-
 ## main effect calculations
+
 maineffectsforallfeatures <- lapply(allfeatures, function(temp){
   x <- fulldf[,temp]
 
-  if (temp %in% trimfeatures){
-    trim.outliers==TRUE
-  } else {trim.outliers==FALSE}
+  if (temp %in% trimfeatures == TRUE){
+    trimo=TRUE
+  } else {trimo=FALSE}
 
   # trim outliars
-  if(trim.outliers==TRUE){
+  if(trimo==TRUE){
     out <- grDevices::boxplot.stats(x, do.out = TRUE)$out
     x <- x[!(x %in% out)]
   }
@@ -58,7 +58,7 @@ names(maineffectsforallfeatures) <- allfeatures
 friedmanHstat <- lapply(allfeatures, function(tempx){
   ## creating x variable specifications
   x <- fulldf[,tempx]
-  if (tempx %in% trimfeatures){
+  if (tempx %in% trimfeatures == TRUE){
     trim1 = TRUE
   } else {trim1 = FALSE}
 
@@ -75,9 +75,9 @@ friedmanHstat <- lapply(allfeatures, function(tempx){
 
   twointerac <- lapply(ynames, function(tempy){
     y <- fulldf[,tempy]
-    if (tempy %in% trimfeatures){
+    if (tempy %in% trimfeatures == TRUE){
       trim2 = TRUE
-    } else {trim2 = FALSE}
+    } else {trim2=FALSE}
 
     if(trim2==TRUE){
       outy <- grDevices::boxplot.stats(y, do.out = TRUE)$out
@@ -154,7 +154,6 @@ return(friedmanHstat)
 #' allfeatures <- c("Sepal.Length","Petal.Width", "Sepal.Width", "Petal.Length")
 #' grid.resolution <- 2
 #' trimfeatures <- c("Petal.Width")
-#' trim.outliers <- FALSE
 #' classnames <- c("setosa", "versicolor", "virginica")
 #' friedmanHstat(rf, fulldf, subsetdf,
 #'              allfeatures,
