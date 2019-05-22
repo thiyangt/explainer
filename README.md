@@ -66,8 +66,10 @@ subset_iris <- iris[10:15, -5]
 ice_SW <- ice_cal(forest, Sepal.Width, iris, subset_iris, grid.resolution=10, trim.outliers=FALSE)
 
 ice_SW$variable <- rep(1:6,10)
-f1 <- ggplot(data=ice_SW, aes_string(x=ice_SW$Sepal.Width, y="setosa")) +geom_line(aes(group=ice_SW$variable), alpha=0.3) + 
-  stat_summary(fun.y = mean, geom = "line", col="red", size=1)+xlab("Sepal.Width")+ theme(legend.position="none")+ylab("setosa")
+f1 <-  ggplot(data = ice_SW, aes_string(x = ice_SW$Sepal.Width, y = ice_SW$setosa)) +
+  stat_summary(fun.y = mean, geom = "line", col = "red", size = 1) + xlab("Sepal.Width") +
+  stat_summary(fun.data = mean_cl_normal, geom = "ribbon", fun.args = list(mult = 1), alpha = 0.3) +
+  theme(legend.position = "none") + ylab("setosa")
 
 f2 <- ggplot(data = ice_SW, aes_string(x = ice_SW$Sepal.Width, y = ice_SW$versicolor)) +
   stat_summary(fun.y = mean, geom = "line", col = "red", size = 1) + xlab("Sepal.Width") +
