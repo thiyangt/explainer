@@ -20,8 +20,9 @@ Usage
 ### Number of times each variable appear in each tree in the forest (`forest_info`).
 
 ``` r
-library(randomForest)
 library(explainer)
+library(randomForest)
+library(ggplot2)
 set.seed(2018)
 forest <- randomForest(Species ~ ., data = iris, ntree=50)
 forest_details <- forest_info(forest, 50)
@@ -57,13 +58,39 @@ variable_percent
 #>     32.54157     32.30404     20.66508     14.48931
 ```
 
+ICE curves using a subset of data `ice`
+---------------------------------------
+
+``` r
+subset_iris <- iris[10:15, -5]
+ice_SW <- ice_cal(forest, Sepal.Width, iris, subset_iris, grid.resolution=10, trim.outliers=FALSE)
+
+ice_SW$variable <- rep(1:6,10)
+f1 <- ggplot(data=ice_SW, aes_string(x=ice_SW$Sepal.Width, y="setosa")) +geom_line(aes(group=ice_SW$variable), alpha=0.3) + 
+  stat_summary(fun.y = mean, geom = "line", col="red", size=1)+xlab("Sepal.Width")+ theme(legend.position="none")+ylab("setosa")
+
+f2 <- ggplot(data = ice_SW, aes_string(x = ice_SW$Sepal.Width, y = ice_SW$versicolor)) +
+  stat_summary(fun.y = mean, geom = "line", col = "red", size = 1) + xlab("Sepal.Width") +
+  stat_summary(fun.data = mean_cl_normal, geom = "ribbon", fun.args = list(mult = 1), alpha = 0.3) +
+  theme(legend.position = "none") + ylab("versicolor")
+
+f3 <- ggplot(data = ice_SW, aes_string(x = ice_SW$Sepal.Width, y = ice_SW$virginica)) +
+  stat_summary(fun.y = mean, geom = "line", col = "red", size = 1) + xlab("Sepal.Width") +
+  stat_summary(fun.data = mean_cl_normal, geom = "ribbon", fun.args = list(mult = 1), alpha = 0.3) +
+  theme(legend.position = "none") + ylab("virginica")
+
+gridExtra::grid.arrange(f1, f2, f3, ncol=3)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
 Two-way partial dependency plots
 --------------------------------
 
 Create two-way partial dependency plots based on **subset of training data** used to train the random forest: `twowayinteraction`.
 
 ``` r
-subset_iris <- iris[1:20, -5]
+
 SL_PW_interaction <- twowayinteraction(forest, Sepal.Length, Petal.Width, iris, iris, grid.resolution=10)
 head(SL_PW_interaction)
 #> # A tibble: 6 x 9
@@ -81,12 +108,7 @@ head(SL_PW_interaction)
 Graphical representation of **SL\_PW\_interaction**
 
 ``` r
-library(ggplot2)
-#> 
-#> Attaching package: 'ggplot2'
-#> The following object is masked from 'package:randomForest':
-#> 
-#>     margin
+
 p1 <-  ggplot(
   data = SL_PW_interaction, aes_string(x = SL_PW_interaction$Sepal.Length,y = SL_PW_interaction$Petal.Width, z = SL_PW_interaction$setosa, fill = SL_PW_interaction$setosa
   ))+geom_tile() + 
@@ -108,4 +130,4 @@ p3 <-  ggplot(
 gridExtra::grid.arrange(p1, p2, p3, ncol=3)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />

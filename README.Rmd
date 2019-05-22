@@ -30,8 +30,9 @@ library(explainer)
 ### Number of times each variable appear in each tree in the forest (`forest_info`).
 
 ```{r, message=FALSE}
-library(randomForest)
 library(explainer)
+library(randomForest)
+library(ggplot2)
 set.seed(2018)
 forest <- randomForest(Species ~ ., data = iris, ntree=50)
 forest_details <- forest_info(forest, 50)
@@ -52,13 +53,36 @@ variable_percent <- variable_freq/sum(variable_freq)*100
 variable_percent
 ```
 
+## ICE curves using a subset of data `ice`
+
+```{r, message=FALSE}
+subset_iris <- iris[10:15, -5]
+ice_SW <- ice_cal(forest, Sepal.Width, iris, subset_iris, grid.resolution=10, trim.outliers=FALSE)
+
+ice_SW$variable <- rep(1:6,10)
+f1 <- ggplot(data=ice_SW, aes_string(x=ice_SW$Sepal.Width, y="setosa")) +geom_line(aes(group=ice_SW$variable), alpha=0.3) + 
+  stat_summary(fun.y = mean, geom = "line", col="red", size=1)+xlab("Sepal.Width")+ theme(legend.position="none")+ylab("setosa")
+
+f2 <- ggplot(data = ice_SW, aes_string(x = ice_SW$Sepal.Width, y = ice_SW$versicolor)) +
+  stat_summary(fun.y = mean, geom = "line", col = "red", size = 1) + xlab("Sepal.Width") +
+  stat_summary(fun.data = mean_cl_normal, geom = "ribbon", fun.args = list(mult = 1), alpha = 0.3) +
+  theme(legend.position = "none") + ylab("versicolor")
+
+f3 <- ggplot(data = ice_SW, aes_string(x = ice_SW$Sepal.Width, y = ice_SW$virginica)) +
+  stat_summary(fun.y = mean, geom = "line", col = "red", size = 1) + xlab("Sepal.Width") +
+  stat_summary(fun.data = mean_cl_normal, geom = "ribbon", fun.args = list(mult = 1), alpha = 0.3) +
+  theme(legend.position = "none") + ylab("virginica")
+
+gridExtra::grid.arrange(f1, f2, f3, ncol=3)
+```
+
 ## Two-way partial dependency plots
 
 Create two-way partial dependency plots based on **subset of training data**
 used to train the random forest: `twowayinteraction`. 
 
 ```{r, message=FALSE}
-subset_iris <- iris[1:20, -5]
+
 SL_PW_interaction <- twowayinteraction(forest, Sepal.Length, Petal.Width, iris, iris, grid.resolution=10)
 head(SL_PW_interaction)
 ```
@@ -66,7 +90,7 @@ head(SL_PW_interaction)
 Graphical representation of **SL_PW_interaction**
 
 ```{r}
-library(ggplot2)
+
 p1 <-  ggplot(
   data = SL_PW_interaction, aes_string(x = SL_PW_interaction$Sepal.Length,y = SL_PW_interaction$Petal.Width, z = SL_PW_interaction$setosa, fill = SL_PW_interaction$setosa
   ))+geom_tile() + 
