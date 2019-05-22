@@ -5,7 +5,7 @@
 \title{Fiedman's H-Statistic calculations}
 \usage{
 friedmanHstat(model, fulldf, subsetdf, allfeatures, trimfeatures,
-  grid.resolution, classnames, indexxy)
+  grid.resolution, classnames)
 }
 \arguments{
 \item{model}{name of the fitted randomforest model}
@@ -20,7 +20,7 @@ friedmanHstat(model, fulldf, subsetdf, allfeatures, trimfeatures,
 
 \item{grid.resolution}{number of levels to be considered in the interested features}
 
-\item{indexxy}{after combining the dataframes corresponding indicies of the classes}
+\item{classnames}{vector of names of class names}
 }
 \value{
 data frame containing features and pedicted probabilities

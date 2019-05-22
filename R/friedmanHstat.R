@@ -6,14 +6,13 @@
 #' @param subsetdf subset dataset used to evaluate the fitted model
 #' @param allfeatures vector of names of all features
 #' @param trimfeatures vector of names of features that need to trim
-#' @classnames vector of names of class names
+#' @param classnames vector of names of class names
 #' @param grid.resolution number of levels to be considered in the interested features
-#' @param indexxy after combining the dataframes corresponding indicies of the classes
 #' @return data frame containing features and pedicted probabilities
 #' @importFrom magrittr %>%
 #' @author Thiyanga Talagala
 #' @export
-friedmanHstat <- function(model, fulldf, subsetdf, allfeatures,trimfeatures, grid.resolution, classnames, indexxy){
+friedmanHstat <- function(model, fulldf, subsetdf, allfeatures,trimfeatures, grid.resolution, classnames){
 
 ## main effect calculations
 maineffectsforallfeatures <- lapply(allfeatures, function(temp){
@@ -39,7 +38,7 @@ maineffectsforallfeatures <- lapply(allfeatures, function(temp){
   # Create grid based on feature space
   grid.pred <- tidyr::crossing(seqx, xc)
   colnames(grid.pred)[1] <- paste(temp)
-  predicted <- data.frame(predict(model, grid.pred, type="prob"))
+  predicted <- data.frame(stats::predict(model, grid.pred, type="prob"))
   grid.pred$id <- 1:dim(grid.pred)[1]
   predicted$id <- 1:dim(grid.pred)[1]
   mainfull <- dplyr::left_join(grid.pred, predicted)
@@ -126,7 +125,8 @@ friedmanHstat <- lapply(allfeatures, function(tempx){
     mainy <- maineffectsforallfeatures[[tempy]]
     full1 <- merge(twofull, mainx, tempx, all = T)
     full <- merge(full1,mainy, tempy, all=T)
-    two_xy <- data.frame(scale(full[,indexy], center = TRUE, scale=FALSE))
+    indexxy <- which(colnames(twofull) %in% classnames==TRUE)
+    two_xy <- data.frame(scale(full[,indexxy], center = TRUE, scale=FALSE))
     main_x <- data.frame(scale(full[,indexxy+length(classnames)], center = TRUE, scale = FALSE))
     main_y <- data.frame(scale(full[, indexxy+(2*length(classnames))], center = TRUE, scale=FALSE))
 
@@ -156,8 +156,7 @@ return(friedmanHstat)
 #' trimfeatures <- c("Petal.Width")
 #' trim.outliers <- FALSE
 #' classnames <- c("setosa", "versicolor", "virginica")
-#' indexxy <- 6:8
 #' friedmanHstat(rf, fulldf, subsetdf,
 #'              allfeatures,
-#'              trimfeatures,2, c("setosa", "versicolor", "virginica"), indexxy)
+#'              trimfeatures,2, c("setosa", "versicolor", "virginica"))
 
