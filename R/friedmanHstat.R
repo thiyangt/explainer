@@ -132,7 +132,7 @@ friedmanHstat <- lapply(allfeatures, function(tempx){
 
     top <- (two_xy-(main_x+main_y))^2
     bottom <- two_xy^2
-    friedman <- round(colMeans(top)/colMeans(bottom),2)
+    friedman <- round(colSums(top)/colSums(bottom),2)
    # friedman
 
   })
