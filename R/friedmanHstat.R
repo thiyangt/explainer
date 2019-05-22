@@ -29,7 +29,7 @@ maineffectsforallfeatures <- lapply(allfeatures, function(temp){
   }
 
   # Create a list containing the values of interest for each of the predictor
-  seqx <- seq(from = min(x, na.rm = TRUE), to = max(x, na.rm = TRUE),
+  seqx <- seq(from = min(x, na.rm = TRUE)[1], to = max(x, na.rm = TRUE)[1],
               length = grid.resolution)
 
   # split the other predictors
@@ -46,7 +46,7 @@ maineffectsforallfeatures <- lapply(allfeatures, function(temp){
   pdpx <- mainfull %>% group_by_(temp) %>% summarise_at(
     .vars = vars(classnames),
     .funs = c(mean="mean"))
-  return(pdpx)
+  pdpx
 
 })
 names(maineffectsforallfeatures) <- allfeatures
@@ -67,7 +67,7 @@ friedmanHstat <- lapply(allfeatures, function(tempx){
     x <- x[!(x %in% outx)]
   }
   # Create a list containing the values of interest for each of the predictor
-  seqx <- seq(from = min(x, na.rm = TRUE), to = max(x, na.rm = TRUE),
+  seqx <- seq(from = min(x, na.rm = TRUE)[1], to = max(x, na.rm = TRUE)[1],
               length = grid.resolution)
 
   # Creating y vaiable(s*) specifications
@@ -85,7 +85,7 @@ friedmanHstat <- lapply(allfeatures, function(tempx){
     }
 
     # Create a list containing the values of interest for each of the predictor
-    seqy <- seq(from = min(y, na.rm = TRUE), to = max(y, na.rm = TRUE),
+    seqy <- seq(from = min(y, na.rm = TRUE)[1], to = max(y, na.rm = TRUE)[1],
                 length = grid.resolution)
     # grid of selected variables
     xs <- tidyr::crossing(seqx, seqy)
@@ -117,9 +117,9 @@ friedmanHstat <- lapply(allfeatures, function(tempx){
     #   .funs = c(mean="mean"))
 
     ## mean two-way interaction effect
-    # twoxy <- twofull %>% group_by_(tempx, tempy) %>% summarise_at(
+    # twofull <- twofull %>% group_by_(tempx, tempy) %>% summarise_at(
     #   .vars = vars(classnames),
-    #   .funs = c(mean="mean"))
+    #    .funs = c(mean="mean"))
 
     mainx <- maineffectsforallfeatures[[tempx]]
     mainy <- maineffectsforallfeatures[[tempy]]
@@ -148,7 +148,7 @@ return(friedmanHstat)
 #' @example
 #'data(iris)
 #'rf <- randomForest::randomForest(Species ~ ., data=iris)
-#' subsetdf <- iris[1:2, -5]
+#' subsetdf <- iris[, -5]
 #' model <- rf
 #' fulldf <- iris
 #' allfeatures <- c("Sepal.Length","Petal.Width", "Sepal.Width", "Petal.Length")
