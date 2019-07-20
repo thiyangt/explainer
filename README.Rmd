@@ -114,3 +114,32 @@ p3 <-  ggplot(
 gridExtra::grid.arrange(p1, p2, p3, ncol=3)
 ```
 
+
+```{r}
+SL_SW_interaction <- twowayinteraction(forest, Sepal.Length, Sepal.Width, iris, iris, grid.resolution=10)
+head(SL_SW_interaction)
+
+
+f1 <-  ggplot(
+  data = SL_SW_interaction, aes_string(x = SL_SW_interaction$Sepal.Length,y = SL_SW_interaction$Sepal.Width, z = SL_SW_interaction$setosa, fill = SL_SW_interaction$setosa
+  ))+geom_tile() + 
+  scale_fill_viridis_c(limits = c(0, 1), breaks = seq(0, 1, 100),option = "A", direction = -1)+
+  xlab("Sepal Length") + ylab("Sepal Width") + theme( aspect.ratio=1)+ggtitle("setosa")
+
+f2 <-  ggplot(
+  data = SL_SW_interaction, aes_string(x = SL_SW_interaction$Sepal.Length,y = SL_SW_interaction$Sepal.Width, z = SL_SW_interaction$versicolor, fill = SL_SW_interaction$versicolor
+  ))+geom_tile() + 
+  scale_fill_viridis_c(limits = c(0, 1), breaks = seq(0, 1, 100),option = "A", direction = -1)+
+  xlab("Sepal Length") + ylab("Sepal Width") + theme( aspect.ratio=1)+ggtitle("versicolor")
+
+f3 <-  ggplot(
+  data = SL_SW_interaction, aes_string(x = SL_SW_interaction$Sepal.Length,y = SL_SW_interaction$Sepal.Width, z = SL_SW_interaction$virginica, fill = SL_SW_interaction$virginica
+  ))+geom_tile() + 
+  scale_fill_viridis_c(limits = c(0, 1), breaks = seq(0, 1, 100),option = "A", direction = -1)+
+  xlab("Sepal Length") + ylab("Sepal Width") + theme( aspect.ratio=1)+ggtitle("virginica")
+
+gridExtra::grid.arrange(f1, f2, f3, ncol=3)
+
+
+```
+

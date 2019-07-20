@@ -133,3 +133,42 @@ gridExtra::grid.arrange(p1, p2, p3, ncol=3)
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+
+``` r
+SL_SW_interaction <- twowayinteraction(forest, Sepal.Length, Sepal.Width, iris, iris, grid.resolution=10)
+#> Joining, by = "id"
+head(SL_SW_interaction)
+#> # A tibble: 6 x 9
+#>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species    id setosa
+#>          <dbl>       <dbl>        <dbl>       <dbl> <fct>   <int>  <dbl>
+#> 1          4.3           2          1.4         0.2 setosa      1   0.96
+#> 2          4.3           2          1.4         0.2 setosa      2   0.96
+#> 3          4.3           2          1.3         0.2 setosa      3   0.96
+#> 4          4.3           2          1.5         0.2 setosa      4   0.96
+#> 5          4.3           2          1.4         0.2 setosa      5   0.96
+#> 6          4.3           2          1.7         0.4 setosa      6   0.96
+#> # ... with 2 more variables: versicolor <dbl>, virginica <dbl>
+
+
+f1 <-  ggplot(
+  data = SL_SW_interaction, aes_string(x = SL_SW_interaction$Sepal.Length,y = SL_SW_interaction$Sepal.Width, z = SL_SW_interaction$setosa, fill = SL_SW_interaction$setosa
+  ))+geom_tile() + 
+  scale_fill_viridis_c(limits = c(0, 1), breaks = seq(0, 1, 100),option = "A", direction = -1)+
+  xlab("Sepal Length") + ylab("Sepal Width") + theme( aspect.ratio=1)+ggtitle("setosa")
+
+f2 <-  ggplot(
+  data = SL_SW_interaction, aes_string(x = SL_SW_interaction$Sepal.Length,y = SL_SW_interaction$Sepal.Width, z = SL_SW_interaction$versicolor, fill = SL_SW_interaction$versicolor
+  ))+geom_tile() + 
+  scale_fill_viridis_c(limits = c(0, 1), breaks = seq(0, 1, 100),option = "A", direction = -1)+
+  xlab("Sepal Length") + ylab("Sepal Width") + theme( aspect.ratio=1)+ggtitle("versicolor")
+
+f3 <-  ggplot(
+  data = SL_SW_interaction, aes_string(x = SL_SW_interaction$Sepal.Length,y = SL_SW_interaction$Sepal.Width, z = SL_SW_interaction$virginica, fill = SL_SW_interaction$virginica
+  ))+geom_tile() + 
+  scale_fill_viridis_c(limits = c(0, 1), breaks = seq(0, 1, 100),option = "A", direction = -1)+
+  xlab("Sepal Length") + ylab("Sepal Width") + theme( aspect.ratio=1)+ggtitle("virginica")
+
+gridExtra::grid.arrange(f1, f2, f3, ncol=3)
+```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
